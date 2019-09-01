@@ -4,12 +4,14 @@
   "description": "Hollo World!",
   "main": "app.js",
   "scripts": {
+    "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "akiyasui",
   "license": "MIT",
   "dependencies": {
     "express": "^4.17.1",
+    "request": "^2.88.0",
     "socket.io": "^2.2.0"
   }
 }

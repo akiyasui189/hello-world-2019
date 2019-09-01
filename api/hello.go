@@ -4,19 +4,18 @@ import (
     "fmt"
     "log"
     "net/http"
+    "io"
     "time"
     "encoding/json"
 )
-
-var err error
 
 type HelloWorldRequest struct {
     Message string `json:message,string`
 }
 
 type HelloWorldResponse struct {
-    MessageId    string `json:"messageId,string"`
-    RegisteredAt string `json:"registeredAt,string"`
+    MessageId    int64 `json:"messageId"`
+    RegisteredAt string `json:"registeredAt"`
 }
 
 // health check
@@ -56,33 +55,27 @@ func handler (w http.ResponseWriter, r *http.Request) {
     }
     // read body
     body := make([]byte, contentLength)
-    r.Body.Read(body)
-    /*
     _, err := r.Body.Read(body)
-    if err != nil {
+    if err != nil && err != io.EOF {
         // 500
-        fmt.Printf("error: ", err)
         log.Println("Request Body Read Error :", err)
         w.WriteHeader(http.StatusInternalServerError)
         return
     }
-    */
     log.Printf("request body: %s", string(body))
     // convert from json to struct
     var request HelloWorldRequest
-    json.Unmarshal(body, &request)
-    /*
+    err = json.Unmarshal(body, &request)
     if err != nil {
         // 500
         log.Println("Request Body JSON Parse Error :", err)
         w.WriteHeader(http.StatusInternalServerError)
         return
     }
-    */
     log.Printf("request message : %s", request.Message)
     // set response
     var response HelloWorldResponse
-    response.MessageId = "1000000001"
+    response.MessageId = 1000000001
     response.RegisteredAt = time.Now().Format("2006-01-02T15:04:05.000")
     responseBody, err := json.Marshal(response);
     if err != nil {

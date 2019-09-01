@@ -31,7 +31,8 @@
           $('#m').val('');
           return false;
         });
-        socket.on('chat message', function(msg) {
+        socket.on('chat message', function(data) {
+          var msg = data.registeredAt + '> ' + data.message;
           $('#messages').append($('<li>').text(msg));
         });
     });
